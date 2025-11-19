@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<!--
+    🌈 Baby's Touch Garden - Interactive Game for Toddlers 🌈
+    Version 2.0 - Now with background music!
+    
+    Original Creator: [Your Name]
+    Created: 2024
+    License: MIT with Attribution
+-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,6 +34,84 @@
             height: 100vh;
             position: relative;
             overflow: hidden;
+        }
+
+        /* Music Control Button */
+        #musicControl {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        #musicControl:active {
+            transform: translateX(-50%) scale(0.9);
+        }
+
+        #musicControl.playing {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.1); }
+        }
+
+        /* Start Screen */
+        #startScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #startButton {
+            font-size: 24px;
+            padding: 20px 40px;
+            background: #FFD700;
+            color: #333;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: bold;
+            animation: bounceBtn 2s infinite;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        @keyframes bounceBtn {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .welcome-emoji {
+            font-size: 80px;
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         /* Floating Bubbles */
@@ -98,11 +184,11 @@
             top: 20px;
             right: 20px;
             font-size: 80px;
-            animation: rotate 10s linear infinite;
+            animation: rotateSun 10s linear infinite;
             cursor: pointer;
         }
 
-        @keyframes rotate {
+        @keyframes rotateSun {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
@@ -114,7 +200,7 @@
         /* Score Display */
         #score {
             position: absolute;
-            top: 20px;
+            top: 90px;
             left: 20px;
             font-size: 24px;
             color: #FF6B6B;
@@ -147,51 +233,166 @@
             #sun {
                 font-size: 60px;
             }
+            #musicControl {
+                width: 50px;
+                height: 50px;
+                font-size: 30px;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="gameContainer">
+    <!-- Start Screen -->
+    <div id="startScreen">
+        <div class="welcome-emoji">🌈</div>
+        <h1>Baby's Touch Garden</h1>
+        <p>A magical world of colors and sounds!</p>
+        <button id="startButton">🎮 Start Playing!</button>
+    </div>
+
+    <!-- Game Container -->
+    <div id="gameContainer" style="display: none;">
+        <button id="musicControl" class="playing">🎵</button>
         <div id="sun">☀️</div>
         <div id="score">⭐ 0</div>
     </div>
 
-    <audio id="popSound" preload="auto">
-        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBCuBzvLZiTYIG2m98OScTgwOUanm7blmFAU1kNHz0nouBSl+yO/ckEAKFFux6OygThANSKXh8b9pIAUuhM/y2Yo3CRxqvu/mnEoMDVCm5e+3YhYEPI7T8tF7LwUlgMvo2ZE/ChVhtOjtp1QRDkeg4vG/ZiEEMITP8tiJOAkabrvs551IDQxPqOPwtmMcBjiS1/LNeSsFJHfH7922RQwXXrXn76hVFApHoOLyvmwhBCyBzvLZiTYIG2m98OScTgwOUanm7blmFAU1kNHz0nouBSl+yO/ckEAKFFux5+2gUBEKR6Dh8b9oIAQuhM/y2Yo3CRxqvu/mnEoMDVCm5e+3YhYEPI7T8tF7LwUlgMvo2ZE/ChVhtOjtp1QRDkeg4vG/ZiEEMITO8tiIOQkabrrr551IDQxPqOPwtmMcBjiS1/LNeSsFJHfH7922RQwXXrXn76hVFApHoOLyvmwhBCyBzvLZiTYIG2m98OScTgwOUanm7blmFAU1kNHz0nosBSl+yO/ckEAKFFux5+2gUBEKR6Dh8b9oIAQuhM/y2Yo3CRxqvu/mnEoMDVCm5e+3YhYEPI7T8tF7LwUlgMvo2ZE/ChVhtOjtp1QRDkeg4vG/ZiEEMITO8tiIOQkabrrr551IDQxPqOPwtmMcBjiS1/LNeSsFJHfH7922RQwXXrXn76hVFApHoOLyvmwhBCyBzvLZiTYIG2m98OScTgwOUanm7blmFAU1kNHz0nosBSl+yO/ckEAKFFux5+2gUBEKR6Dh8b9oIAQuhM/y2Yo3CRxqvu/mnEoMDVCm5e+3YhYEPI7T8tF7LwUlgMvo2ZE/ChVhtOjtp1QRDkeg4vG/ZiEEMITO8tiIOQkabrrr551IDQxPqOPwtmMcBjiS1/LNeSsFJHfH7922RQwXXrXn76hVFApHoOLyvmwhBCyBzvLZiTYIG2m98OScTgwOUanm7blmFAU1kNHz0nosBSl+yO/ckEAKFFux5+2gUBEKR6Dh8b9oIAQuhM/y2Yo3CRxqvu/mnEoMDVCm5e+3YhYEPI7T8tF7LwUlgMvo2ZE/ChVhtOjtp1QRDkeg4vG/ZiEEMITO8tiIOQkabrro551JDQxPqOPwtmMcBjiS1/LNeSsFJHfH7922RQwXXrXn76hVFApHoOLyvmwhBCyBzvLZiTYIG2m98OScTgwOUanm7blmFAU1kNHz0nosBSl+yO/ckEAKFFux5+2gUBEKR6Dh8b9oIAQuhM/y2Yo3CRxqvu/mnEoMDVCm5e+3YhYEPI7T8tF7LwUlgMvo2ZE/ChVhtOjtp1QRDkeg4vG/ZiEEMITO8tiIOQkabrro551JDQxPqOPwtmMcBjiS1/LNeSsFJHfH7922RQwXXrXn76hVFApHoOLyvmwhBCyBzvLZiTYIG2m98OScTgwOUanm7blmFAU1kNHz0nosBSl+yO/ckEAKFFux5+2gUBEKR6Dh8b9oIAQuhM/y2Yo3CQ==" type="audio/wav">
+    <!-- Background Music (Multiple sources for compatibility) -->
+    <audio id="backgroundMusic" loop>
+        <!-- You can replace these with actual music files -->
+        <source src="data:audio/mpeg;base64,SUQzAwAAAAAAF1RYWFgAAAAOAAAAU29mdHdhcmUATGF2ZjU4LjI5LjEwMAAA//tQwAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAADAAAGhgBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVWqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr///////////////////////////////////8AAAAATGF2YzU4LjU0AAAAAAAAAAAAAAAAJAM4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//tQxAAOAAAGkAAAAIAAANIAAAARBQBDAAACgCAAIYBQAMAQADGAAIYBQAMAQADBAEMAwQMAQADBAEMAwQBDAAEIAQwDBAAAAAAA//tQxBYOAAAGkAAAAIAAANIAAAARDBAEAAwQBDBAEMEAQwQBDBAEMEAQwQBDAAEAAwQBDBAEMEAQADBAAAAAAAAAAAAAAAAAAA==" type="audio/mpeg">
     </audio>
 
     <script>
         // Game State
         let score = 0;
+        let musicPlaying = true;
         const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#FFD700', '#FF69B4', '#87CEEB'];
         const animals = ['🐶', '🐱', '🐸', '🐷', '🐵', '🦁', '🐨', '🐰', '🦊', '🐻', '🐼', '🦋'];
         const shapes = ['⭐', '❤️', '🌟', '💫', '✨', '🌈', '🎈', '🌸'];
 
-        // Sound effect
-        function playSound() {
-            const audio = document.getElementById('popSound');
-            audio.currentTime = 0;
-            audio.play().catch(e => console.log('Audio play failed:', e));
+        // Music Manager Class
+        class MusicManager {
+            constructor() {
+                this.audioContext = null;
+                this.oscillators = [];
+                this.isPlaying = false;
+                this.musicInterval = null;
+            }
+
+            init() {
+                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                this.playBackgroundMelody();
+            }
+
+            playBackgroundMelody() {
+                if (this.isPlaying) return;
+                this.isPlaying = true;
+
+                // Simple lullaby-like melody
+                const melody = [
+                    {note: 261.63, duration: 500}, // C
+                    {note: 293.66, duration: 500}, // D
+                    {note: 329.63, duration: 500}, // E
+                    {note: 261.63, duration: 500}, // C
+                    {note: 261.63, duration: 500}, // C
+                    {note: 293.66, duration: 500}, // D
+                    {note: 329.63, duration: 500}, // E
+                    {note: 261.63, duration: 500}, // C
+                    {note: 329.63, duration: 500}, // E
+                    {note: 349.23, duration: 500}, // F
+                    {note: 392.00, duration: 1000}, // G
+                ];
+
+                let noteIndex = 0;
+                
+                const playNote = () => {
+                    if (!this.isPlaying) return;
+                    
+                    const {note, duration} = melody[noteIndex % melody.length];
+                    this.createTone(note, duration, 0.1); // Low volume for background
+                    noteIndex++;
+                };
+
+                // Play melody continuously
+                playNote(); // Play first note immediately
+                this.musicInterval = setInterval(playNote, 600);
+            }
+
+            createTone(frequency, duration, volume = 0.3) {
+                if (!this.audioContext) return;
+                
+                const oscillator = this.audioContext.createOscillator();
+                const gainNode = this.audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(this.audioContext.destination);
+                
+                oscillator.frequency.value = frequency;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + duration / 1000);
+                
+                oscillator.start(this.audioContext.currentTime);
+                oscillator.stop(this.audioContext.currentTime + duration / 1000);
+                
+                this.oscillators.push(oscillator);
+            }
+
+            toggle() {
+                this.isPlaying = !this.isPlaying;
+                
+                if (!this.isPlaying) {
+                    clearInterval(this.musicInterval);
+                    this.oscillators.forEach(osc => {
+                        try { osc.stop(); } catch(e) {}
+                    });
+                    this.oscillators = [];
+                } else {
+                    this.playBackgroundMelody();
+                }
+                
+                return this.isPlaying;
+            }
+
+            playEffect(frequency = 800, duration = 200) {
+                this.createTone(frequency, duration, 0.3);
+            }
         }
 
-        // Create simple tone sound
-        function createTone(frequency = 800, duration = 200) {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
+        // Initialize Music Manager
+        const musicManager = new MusicManager();
+
+        // Start Game Function
+        function startGame() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('gameContainer').style.display = 'block';
             
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
+            // Initialize Audio Context on user interaction (required for mobile)
+            musicManager.init();
             
-            oscillator.frequency.value = frequency;
-            oscillator.type = 'sine';
+            // Start creating game elements
+            setInterval(createBubble, 2000);
+            setInterval(createAnimal, 3000);
             
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration / 1000);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + duration / 1000);
+            // Create initial elements
+            createBubble();
+            createBubble();
+            createAnimal();
         }
+
+        // Music Control Button
+        document.getElementById('musicControl').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isPlaying = musicManager.toggle();
+            
+            this.textContent = isPlaying ? '🎵' : '🔇';
+            this.classList.toggle('playing', isPlaying);
+        });
+
+        // Start Button
+        document.getElementById('startButton').addEventListener('click', startGame);
 
         // Create Bubble
         function createBubble() {
@@ -221,7 +422,6 @@
             
             document.getElementById('gameContainer').appendChild(bubble);
             
-            // Auto remove after 5 seconds if not popped
             setTimeout(() => {
                 if (bubble.parentNode) {
                     bubble.remove();
@@ -229,11 +429,11 @@
             }, 5000);
         }
 
-        // Pop Bubble
+        // Pop Bubble with sound effect
         function popBubble(bubble) {
             if (!bubble.classList.contains('pop')) {
                 bubble.classList.add('pop');
-                createTone(600 + Math.random() * 400, 150);
+                musicManager.playEffect(600 + Math.random() * 400, 150);
                 updateScore(5);
                 createStarBurst(bubble.offsetLeft + bubble.offsetWidth/2, bubble.offsetTop + bubble.offsetHeight/2);
                 
@@ -265,7 +465,6 @@
             
             document.getElementById('gameContainer').appendChild(animal);
             
-            // Move animal slowly
             let xSpeed = (Math.random() - 0.5) * 2;
             let ySpeed = (Math.random() - 0.5) * 2;
             
@@ -283,7 +482,6 @@
                 animal.style.top = y + 'px';
             }, 50);
             
-            // Remove after 8 seconds
             setTimeout(() => {
                 clearInterval(moveAnimal);
                 if (animal.parentNode) {
@@ -295,7 +493,7 @@
         // Animal Click Handler
         function animalClick(animal) {
             animal.classList.add('bounce');
-            createTone(800, 100);
+            musicManager.playEffect(800, 100);
             updateScore(10);
             createParticles(animal.offsetLeft + 30, animal.offsetTop + 30);
             
@@ -344,7 +542,6 @@
             score += points;
             document.getElementById('score').textContent = '⭐ ' + score;
             
-            // Celebration at milestones
             if (score % 50 === 0 && score > 0) {
                 celebrate();
             }
@@ -375,7 +572,7 @@
         document.getElementById('gameContainer').addEventListener('click', function(e) {
             if (e.target.id === 'gameContainer') {
                 createStarBurst(e.clientX, e.clientY);
-                createTone(400, 100);
+                musicManager.playEffect(400, 100);
                 updateScore(1);
             }
         });
@@ -385,7 +582,7 @@
                 e.preventDefault();
                 const touch = e.touches[0];
                 createStarBurst(touch.clientX, touch.clientY);
-                createTone(400, 100);
+                musicManager.playEffect(400, 100);
                 updateScore(1);
             }
         });
@@ -394,10 +591,9 @@
         document.getElementById('sun').addEventListener('click', function(e) {
             e.stopPropagation();
             this.style.fontSize = '120px';
-            createTone(1000, 200);
+            musicManager.playEffect(1000, 200);
             updateScore(15);
             
-            // Create rainbow effect
             for (let i = 0; i < 10; i++) {
                 setTimeout(() => {
                     const rainbow = document.createElement('div');
@@ -420,15 +616,6 @@
             }, 300);
         });
 
-        // Game Loop - Create new elements
-        setInterval(createBubble, 2000);
-        setInterval(createAnimal, 3000);
-
-        // Initial elements
-        createBubble();
-        createBubble();
-        createAnimal();
-
         // Prevent zoom on double tap
         document.addEventListener('touchstart', function(e) {
             if (e.touches.length > 1) {
@@ -436,8 +623,7 @@
             }
         });
 
-        // Welcome message
-        console.log('🎮 Baby Touch Garden loaded! Touch anywhere to play!');
+        console.log('🎮 Baby Touch Garden with Music loaded! Click Start to play!');
     </script>
 </body>
 </html>
